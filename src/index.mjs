@@ -1,10 +1,10 @@
-import fs from "fs"
-import url from "url"
 import _ from "lodash"
+import chalk from "chalk"
+import fs from "fs"
+import mustache from "mustache"
 import path from "path"
 import sharp from "sharp"
-import chalk from "chalk"
-import mustache from "mustache"
+import url from "url"
 import { createWorker } from "tesseract.js"
 
 /**
@@ -18,7 +18,7 @@ const REFLECT = false
 /**
  * Prepare global const to export.
  */
-const CONST = { CHANNEL, SEPARATOR, REFLECT }
+const CONST = { CHANNEL, SEPARATOR, REFLECT, LOG }
 
 /**
  * Prepare root path.
@@ -175,7 +175,7 @@ const cleaner = async (input, { channel = CHANNEL, separator = SEPARATOR } = {})
         /**
          * Calculate proccess duration.
          */
-        logger("success", "cleaner", "Done at", `${(Date.now() - startTime) / 1000}ms.`)
+        logger("success", "cleaner", "Done in", `${(Date.now() - startTime) / 1000}ms.`)
 
         return {
             buffer,
@@ -209,9 +209,24 @@ const extractor = async (input) => {
 
     try {
         /**
+         * Prepare status of worker.
+         */
+        let workerStatus = null
+
+        /**
          * Prepare Tesseract worker instance.
          */
-        const ocr = createWorker()
+        const ocr = createWorker({
+            gzip: true,
+            cacheMethod: "refresh",
+            langPath: path.resolve(DIRNAME, "data"),
+            logger: ({ status }) => {
+                if (workerStatus !== status) {
+                    workerStatus = status
+                    logger("info", "extractor", _.startCase(status))
+                }
+            },
+        })
 
         /**
          * Load worker config.
@@ -223,7 +238,6 @@ const extractor = async (input) => {
          */
         await ocr.loadLanguage("eng")
         await ocr.initialize("eng")
-        logger("info", "extractor", "Prepared worker")
 
         /**
          * Prepare worker options.
@@ -234,7 +248,6 @@ const extractor = async (input) => {
          * Prepare recognized data.
          */
         const recognized = await ocr.recognize(input)
-        logger("info", "extractor", "Recognized data")
 
         /**
          * Terminate worker instance.
@@ -343,7 +356,7 @@ const extractor = async (input) => {
         /**
          * Calculate proccess duration.
          */
-        logger("success", "extractor", "Done at", `${(Date.now() - startTime) / 1000}ms.`)
+        logger("success", "extractor", "Done in", `${(Date.now() - startTime) / 1000}ms.`)
 
         return {
             signal: data.lines,
@@ -467,7 +480,7 @@ const reflector = async (input, { cleaned, extracted, reflect }) => {
             /**
              * Calculate proccess duration.
              */
-            logger("success", "reflector", "Done at", `${(Date.now() - startTime) / 1000}ms.`)
+            logger("success", "reflector", "Done in", `${(Date.now() - startTime) / 1000}ms.`)
 
             return reflectBuffer
         }
@@ -485,7 +498,7 @@ const reflector = async (input, { cleaned, extracted, reflect }) => {
         /**
          * Calculate proccess duration.
          */
-        logger("success", "reflector", "Done at", `${(Date.now() - startTime) / 1000}ms.`)
+        logger("success", "reflector", "Done in", `${(Date.now() - startTime) / 1000}ms.`)
 
         /**
          * Return path of reflect file.
@@ -573,7 +586,7 @@ const butcher = (input, { channel = CHANNEL, separator = SEPARATOR, reflect = RE
             /**
              * Calculate proccess duration.
              */
-            logger("success", "butcher", "Done at", `${(Date.now() - startTime) / 1000}ms.`)
+            logger("success", "butcher", "Done in", `${(Date.now() - startTime) / 1000}ms.`)
 
             /**
              * Resolve main promise.
