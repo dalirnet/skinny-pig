@@ -27,7 +27,7 @@ const { butcher } = require("skinnypig")
 ```javascript
 // async
 try {
-    const { signal, confidence } = await butcher("path/Of/fitPigSignalImage.jpg")
+    const { signal, confidence } = await butcher("path/Of/fatPigSignalImage.jpg")
     /** signal output
      *  {
      *      pair: ["BNB", "USDT"],
@@ -41,7 +41,7 @@ try {
 }
 
 // sync
-startSession("path/Of/fitPigSignalImage.jpg")
+startSession("path/Of/fatPigSignalImage.jpg")
     .then(({ signal, confidence }) => {
         /** confidence output
          *  92
@@ -56,10 +56,10 @@ startSession("path/Of/fitPigSignalImage.jpg")
 
 ```bash
 # npm
-npx skinnypig "path/Of/fitPigSignalImage.jpg"
+npx skinnypig "path/Of/fatPigSignalImage.jpg"
 
 # github
-npx github:dalirnet/skinnypig "path/Of/fitPigSignalImage.jpg"
+npx github:dalirnet/skinnypig "path/Of/fatPigSignalImage.jpg"
 ```
 
 ### Limitations
