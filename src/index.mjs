@@ -1,5 +1,4 @@
 import _ from "lodash"
-import chalk from "chalk"
 import fs from "fs"
 import mustache from "mustache"
 import path from "path"
@@ -38,27 +37,13 @@ const loggerState = (state) => {
     stateOfLogger = state
 }
 
-const logType = {
-    info: chalk.gray,
-    success: chalk.green,
-    error: chalk.red,
-    debug: chalk.yellow,
-}
-
 /**
  * Prepare logger.
  */
 const logger = (type, scope, ...messages) => {
     if (stateOfLogger) {
-        console.log(logType[type](`${new Date().toISOString()}`, `[${_.upperFirst(scope)}]`, ...messages))
+        console[type](`${new Date().toISOString()}`, `[${_.upperFirst(scope)}]`, ...messages)
     }
-}
-
-/**
- * Prepare debug logger.
- */
-const debug = (...messages) => {
-    logger("debug", "debug", ...messages)
 }
 
 /**
@@ -74,7 +59,7 @@ const cleaner = async (input, { channel = CHANNEL, separator = SEPARATOR } = {})
      * Set start time.
      */
     const startTime = Date.now()
-    logger("info", "cleaner", "Starting")
+    logger("log", "cleaner", "Starting")
 
     try {
         /**
@@ -87,7 +72,7 @@ const cleaner = async (input, { channel = CHANNEL, separator = SEPARATOR } = {})
          * Convert to raw data.
          */
         const extractedChannel = sharpInstance.extractChannel(channel).raw()
-        logger("info", "cleaner", "Extracted", channel, "channel")
+        logger("log", "cleaner", "Extracted", channel, "channel")
         /**
          * Resolve as buffer object.
          */
@@ -126,13 +111,13 @@ const cleaner = async (input, { channel = CHANNEL, separator = SEPARATOR } = {})
          * Prepare Sharp instance of cleaned image.
          */
         const cleanedImage = sharp(convertedBuffer, { raw: { width, height, channels } })
-        logger("info", "cleaner", "Cleaned pixels")
+        logger("log", "cleaner", "Cleaned pixels")
 
         /**
          * Trim image edges.
          */
         const trimmedImage = await cleanedImage.trim().toBuffer({ resolveWithObject: true })
-        logger("info", "cleaner", "Trimed edges")
+        logger("log", "cleaner", "Trimed edges")
 
         /**
          * Prepare trimmed data.
@@ -165,7 +150,7 @@ const cleaner = async (input, { channel = CHANNEL, separator = SEPARATOR } = {})
          * Extend image edges.
          */
         const extendedImage = sharp(trimmedData.buffer, { raw: trimmedData.raw }).extend(extendOptions)
-        logger("info", "cleaner", "Extended edges")
+        logger("log", "cleaner", "Extended edges")
 
         /**
          * Prepare png buffer.
@@ -175,7 +160,7 @@ const cleaner = async (input, { channel = CHANNEL, separator = SEPARATOR } = {})
         /**
          * Calculate proccess duration.
          */
-        logger("success", "cleaner", "Done in", `${(Date.now() - startTime) / 1000}ms.`)
+        logger("info", "cleaner", "Done in", `${(Date.now() - startTime) / 1000}ms.`)
 
         return {
             buffer,
@@ -205,7 +190,7 @@ const extractor = async (input) => {
      * Set start time.
      */
     const startTime = Date.now()
-    logger("info", "extractor", "Starting")
+    logger("log", "extractor", "Starting")
 
     try {
         /**
@@ -223,7 +208,7 @@ const extractor = async (input) => {
             logger: ({ status }) => {
                 if (workerStatus !== status) {
                     workerStatus = status
-                    logger("info", "extractor", _.startCase(status))
+                    logger("log", "extractor", _.startCase(status))
                 }
             },
         })
@@ -356,7 +341,7 @@ const extractor = async (input) => {
         /**
          * Calculate proccess duration.
          */
-        logger("success", "extractor", "Done in", `${(Date.now() - startTime) / 1000}ms.`)
+        logger("info", "extractor", "Done in", `${(Date.now() - startTime) / 1000}ms.`)
 
         return {
             signal: data.lines,
@@ -383,7 +368,7 @@ const reflector = async (input, { cleaned, extracted, reflect }) => {
      * Set start time.
      */
     const startTime = Date.now()
-    logger("info", "reflector", "Starting")
+    logger("log", "reflector", "Starting")
 
     try {
         /**
@@ -395,7 +380,7 @@ const reflector = async (input, { cleaned, extracted, reflect }) => {
          * Prepare mustache template.
          */
         const maskTemplate = _.toString(fs.readFileSync(maskPath))
-        logger("info", "reflector", "Loading mask template")
+        logger("log", "reflector", "Loading mask template")
 
         /**
          * Prepare extracted area coordinates.
@@ -423,7 +408,7 @@ const reflector = async (input, { cleaned, extracted, reflect }) => {
          * Render mustache template.
          */
         const maskLayer = mustache.render(maskTemplate, { width: cleaned.width, height: cleaned.height, coordinates })
-        logger("info", "reflector", "Rendred mask template")
+        logger("log", "reflector", "Rendred mask template")
 
         /**
          * Prepare composition of mask layer.
@@ -434,13 +419,13 @@ const reflector = async (input, { cleaned, extracted, reflect }) => {
          * Mask input buffer.
          */
         const maskedImage = await sharp(input).grayscale().composite(compositionMaksLayers).toBuffer()
-        logger("info", "reflector", "Composited mask layer")
+        logger("log", "reflector", "Composited mask layer")
 
         /**
          * Resize masked buffer to constant width and auto height.
          */
         const resizedBuffer = await sharp(maskedImage).resize({ width: 680 }).toBuffer({ resolveWithObject: true })
-        logger("info", "reflector", "Resized masked")
+        logger("log", "reflector", "Resized masked")
 
         /**
          * Calculate new scaled value after resizing.
@@ -471,7 +456,7 @@ const reflector = async (input, { cleaned, extracted, reflect }) => {
          * Composite and sharpen ui layers.
          */
         const reflectBuffer = await sharp(resizedBuffer.data).composite(compositionUiLayers).sharpen().toBuffer()
-        logger("info", "reflector", "Composited ui layer")
+        logger("log", "reflector", "Composited ui layer")
 
         /**
          * When reflect is not specified, return the reflect buffer.
@@ -480,7 +465,7 @@ const reflector = async (input, { cleaned, extracted, reflect }) => {
             /**
              * Calculate proccess duration.
              */
-            logger("success", "reflector", "Done in", `${(Date.now() - startTime) / 1000}ms.`)
+            logger("info", "reflector", "Done in", `${(Date.now() - startTime) / 1000}ms.`)
 
             return reflectBuffer
         }
@@ -498,7 +483,7 @@ const reflector = async (input, { cleaned, extracted, reflect }) => {
         /**
          * Calculate proccess duration.
          */
-        logger("success", "reflector", "Done in", `${(Date.now() - startTime) / 1000}ms.`)
+        logger("info", "reflector", "Done in", `${(Date.now() - startTime) / 1000}ms.`)
 
         /**
          * Return path of reflect file.
@@ -531,7 +516,7 @@ const butcher = (input, { channel = CHANNEL, separator = SEPARATOR, reflect = RE
      * Set start time.
      */
     const startTime = Date.now()
-    logger("info", "butcher", "Starting")
+    logger("log", "butcher", "Starting")
 
     /**
      * Prepare main promise.
@@ -586,7 +571,7 @@ const butcher = (input, { channel = CHANNEL, separator = SEPARATOR, reflect = RE
             /**
              * Calculate proccess duration.
              */
-            logger("success", "butcher", "Done in", `${(Date.now() - startTime) / 1000}ms.`)
+            logger("info", "butcher", "Done in", `${(Date.now() - startTime) / 1000}ms.`)
 
             /**
              * Resolve main promise.

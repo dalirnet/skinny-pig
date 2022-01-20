@@ -5,7 +5,7 @@ const isProduction = process.env.NODE_ENV === "production"
 export default [
     {
         input: "src/index.mjs",
-        external: ["fs", "url", "path", "chalk", "lodash", "sharp", "mustache", "tesseract.js"],
+        external: ["fs", "url", "path", "lodash", "sharp", "mustache", "tesseract.js"],
         plugins: isProduction ? [terser()] : [],
         output: [
             {
