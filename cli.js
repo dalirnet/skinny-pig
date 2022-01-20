@@ -9,8 +9,9 @@ var { argv } = yargs(process.argv.slice(2))
 
 butcher(path.resolve(_.head(argv._)), {
     channel: argv.channel || argv.c || CONST.CHANNEL,
-    separator: argv.separator || CONST.SEPARATOR,
+    separator: argv.separator || argv.s || CONST.SEPARATOR,
     reflect: argv.reflect || argv.r || CONST.REFLECT,
+    log: argv.log || argv.l || CONST.LOG,
 })
     .then((output) => {
         console.log(output)
