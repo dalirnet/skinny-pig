@@ -2,7 +2,7 @@
 
 ![buther](https://raw.githubusercontent.com/dalirnet/skinnypig/master/banner.png)
 
-<p align="center">😉 This is the <b>Butcher</b> of <a href="https://www.fatpigsignals.com/">FatPig</a> signals 😜</p>
+## <p align="center">🐷😄 This is <b>Butcher</b> of <a href="https://www.fatpigsignals.com/">FatPig</a> signals 😄🐷</p>
 
 ### Installation
 
@@ -56,15 +56,21 @@ startSession("path/Of/fitPigSignalImage.jpg")
 
 ```bash
 # npm
-npx plaintl "path/Of/fitPigSignalImage.jpg"
+npx skinnypig "path/Of/fitPigSignalImage.jpg"
 
 # github
-npx github:dalirnet/plaintl "path/Of/fitPigSignalImage.jpg"
+npx github:dalirnet/skinnypig "path/Of/fitPigSignalImage.jpg"
 ```
 
 ### Limitations
 
 -   Not browser-compatible.
--   Only meant for like these images.
+-   Only images like [targets](#targets) are supported.
 
-![buther](https://raw.githubusercontent.com/dalirnet/skinnypig/master/limitations.jpg)
+#### Targets
+
+![targets](https://raw.githubusercontent.com/dalirnet/skinnypig/master/targets.png)
+
+#### Reflects
+
+![reflects](https://raw.githubusercontent.com/dalirnet/skinnypig/master/reflects.png)
