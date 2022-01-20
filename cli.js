@@ -5,9 +5,7 @@ const path = require("path")
 const yargs = require("yargs/yargs")
 const { butcher, CONST } = require("./dist/index.cjs")
 
-var { argv } = yargs(process.argv.slice(2))
-
-const cli = async () => {
+;(async ({ argv }) => {
     try {
         const target = path.resolve(_.head(argv._) || "./")
         const options = {
@@ -21,6 +19,4 @@ const cli = async () => {
     } catch ({ message }) {
         console.error(message)
     }
-}
-
-cli()
+})(yargs(process.argv.slice(2)))

@@ -55,11 +55,7 @@ startSession("path/Of/fatPigSignalImage.jpg")
 ### Cli
 
 ```bash
-# npm
-npx skinnypig "path/Of/target.jpg" -r "path/of/reflect.jpg" -l
-
-# github
-npx github:dalirnet/skinnypig "path/Of/target.jpg" -r "path/of/reflect.jpg" -l
+butcher "path/Of/target.jpg" --reflect "path/of/reflect.jpg" --log
 ```
 
 ### Limitations

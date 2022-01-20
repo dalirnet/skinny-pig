@@ -1,10 +1,10 @@
 {
     "name": "skinnypig",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "description": "Don't think of it Fat!",
     "main": "./src/index.mjs",
     "bin": {
-        "skinnypig": "./cli.js"
+        "butcher": "./cli.js"
     },
     "exports": {
         ".": {
