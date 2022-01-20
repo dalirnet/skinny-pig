@@ -1,6 +1,6 @@
 import fs from "fs"
 import url from "url"
-import _, { cond } from "lodash"
+import _ from "lodash"
 import path from "path"
 import sharp from "sharp"
 import chalk from "chalk"
