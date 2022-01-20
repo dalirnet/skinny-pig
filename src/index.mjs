@@ -9,7 +9,7 @@ import { createWorker } from "tesseract.js"
 /**
  * Prepare default of inputs.
  */
-const LOG = true
+const LOG = false
 const CHANNEL = "blue"
 const SEPARATOR = 175
 const REFLECT = false
@@ -72,11 +72,12 @@ const cleaner = async (input, { channel = CHANNEL, separator = SEPARATOR } = {})
          * Convert to raw data.
          */
         const extractedChannel = sharpInstance.extractChannel(channel).raw()
-        logger("log", "cleaner", "Extracted", channel, "channel")
+
         /**
          * Resolve as buffer object.
          */
         const { data, info } = await extractedChannel.toBuffer({ resolveWithObject: true })
+        logger("log", "cleaner", "Extracted", channel, "channel")
 
         /**
          * Prepare image info.
