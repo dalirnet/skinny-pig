@@ -6,8 +6,6 @@
 
 ### Installation
 
-> ATTENTION: This package is not browser-compatible.
-
 ```bash
 # npm
 npm i skinnypig
