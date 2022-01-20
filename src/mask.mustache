@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {{ width }} {{ height }}">
+    <defs>
+        <mask id="mask" x="0" y="0" width="{{ width }}" height="{{ height }}">
+            <rect x="0" y="0" width="{{ width }}" height="{{ height }}" fill="#f0f0f0" />
+            {{#coordinates}}
+            <rect x="{{ left }}" y="{{ top }}" width="{{ width }}" height="{{ height }}" fill="#444" />
+            {{/coordinates}}
+        </mask>
+    </defs>
+    <rect x="0" y="0" width="{{ width }}" height="{{ height }}" fill="#000" style="mask: url(#mask)" />
+</svg>
