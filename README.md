@@ -56,10 +56,10 @@ startSession("path/Of/fatPigSignalImage.jpg")
 
 ```bash
 # npm
-npx skinnypig "path/Of/target.jpg" -r "path/of/reflect.jpg"
+npx skinnypig "path/Of/target.jpg" -r "path/of/reflect.jpg" -l
 
 # github
-npx github:dalirnet/skinnypig "path/Of/target.jpg" -r "path/of/reflect.jpg"
+npx github:dalirnet/skinnypig "path/Of/target.jpg" -r "path/of/reflect.jpg" -l
 ```
 
 ### Limitations
