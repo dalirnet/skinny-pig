@@ -41,7 +41,7 @@ try {
 }
 
 // sync
-startSession("path/Of/fatPigSignalImage.jpg")
+butcher("path/Of/fatPigSignalImage.jpg")
     .then(({ signal, confidence }) => {
         /** confidence output
          *  92
